@@ -1,0 +1,14 @@
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Uploads cache/temp
+assets/uploads/tmp/
