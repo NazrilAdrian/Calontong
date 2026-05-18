@@ -62,7 +62,6 @@ Sistem informasi berbasis web untuk membantu pengelolaan **toko / warung kelonto
 | Backend         | PHP Native (tanpa framework) |
 | Database        | MySQL 8.0                    |
 | Frontend        | HTML5 + CSS3                 |
-| Chart           | Chart.js (CDN)               |
 | PDF Export      | FPDF / TCPDF                 |
 | Local Dev       | XAMPP / Laragon              |
 | Version Control | Git + GitHub                 |
@@ -227,29 +226,6 @@ http://localhost/warung_kelontong
 
 ---
 
-## 🌿 Git Workflow
-
-```
-main          ← production, hanya kode yang sudah diuji
- └── dev      ← integrasi semua fitur
-      ├── feat/login
-      ├── feat/produk
-      ├── feat/pelanggan
-      ├── feat/transaksi
-      └── feat/dashboard
-```
-
-**Alur kerja per fitur:**
-
-```bash
-git checkout dev && git pull
-git checkout -b feat/nama-fitur
-# ... kerjakan file PHP ...
-git add .
-git commit -m "feat: deskripsi singkat perubahan"
-git push origin feat/nama-fitur
-# Buat Pull Request di GitHub: feat/xxx → dev
-```
 
 **Konvensi commit message:**
 | Prefix | Kapan dipakai |

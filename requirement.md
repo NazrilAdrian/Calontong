@@ -48,7 +48,6 @@
 ✅ PHP Native — DILARANG menggunakan framework Laravel, CodeIgniter, Symfony, dll.
 ✅ MySQL — sebagai database relasional
 ✅ HTML5 + CSS3 — untuk markup dan styling
-✅ Bootstrap 5 — diperbolehkan, diambil via CDN
 ✅ JavaScript — untuk konfirmasi hapus dan interaksi UI sederhana
 ```
 
@@ -78,7 +77,7 @@
 ✅ Berjalan di localhost menggunakan XAMPP / Laragon / MAMP
 ✅ PHP versi >= 7.4
 ✅ MySQL versi >= 5.7
-✅ Diuji di browser Chrome / Firefox terbaru
+✅ Diuji di browser Chrome / Firefox
 ✅ Resolusi minimum yang didukung: 1024px (desktop)
 ```
 
