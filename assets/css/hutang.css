@@ -1,0 +1,884 @@
+body {
+    background-color: #ffffff;
+    color: #102b5b;
+    font-family: Arial, sans-serif;
+}
+
+.page-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px 24px;
+}
+
+.section-content {
+    width: 100%;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #102b5b;
+    margin-bottom: 10px;
+}
+
+.table-box {
+    width: 100%;
+    min-height: 165px;
+    border: 1px solid #9c9c9c;
+    border-radius: 8px;
+    overflow: auto;
+    background-color: #ffffff;
+}
+
+.table {
+    min-width: 780px;
+}
+
+.table thead th {
+    color: #102b5b;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 1px solid #d8d8d8;
+}
+
+.table tbody td {
+    font-size: 14px;
+    color: #102b5b;
+    white-space: nowrap;
+}
+
+.empty-row td {
+    height: 110px;
+    vertical-align: middle;
+}
+
+.btn-add {
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 6px 16px;
+    background-color: #159a3b;
+    border-color: #159a3b;
+}
+
+.btn-add:hover {
+    background-color: #128534;
+    border-color: #128534;
+}
+
+.link-report {
+    font-size: 14px;
+    font-style: italic;
+    text-decoration: none;
+}
+
+.link-report:hover {
+    text-decoration: underline;
+}
+
+.btn-action {
+    font-size: 12px;
+    padding: 4px 9px;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+.btn-outline-primary {
+    color: #102b5b;
+    border-color: #102b5b;
+}
+
+.btn-outline-primary:hover {
+    color: #ffffff;
+    background-color: #102b5b;
+    border-color: #102b5b;
+}
+
+.btn-outline-warning {
+    color: #b7791f;
+    border-color: #d69e2e;
+}
+
+.btn-outline-warning:hover {
+    color: #ffffff;
+    background-color: #d69e2e;
+    border-color: #d69e2e;
+}
+
+.btn-outline-danger {
+    color: #c53030;
+    border-color: #e53e3e;
+}
+
+.btn-outline-danger:hover {
+    color: #ffffff;
+    background-color: #e53e3e;
+    border-color: #e53e3e;
+}
+
+.form-section {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #102b5b;
+    margin-bottom: 18px;
+}
+
+.form-card {
+    width: 100%;
+    border: 1px solid #9c9c9c;
+    border-radius: 8px;
+    padding: 22px 16px 18px;
+    background-color: #ffffff;
+}
+
+.form-label {
+    font-size: 17px;
+    font-weight: 700;
+    color: #102b5b;
+    margin-bottom: 6px;
+}
+
+.form-control,
+.form-select {
+    font-size: 15px;
+    border: 1px solid #9c9c9c;
+    border-radius: 5px;
+    padding: 6px 8px;
+    color: #102b5b;
+}
+
+.form-control::placeholder {
+    color: #8b8b8b;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #159a3b;
+    box-shadow: 0 0 0 0.15rem rgba(21, 154, 59, 0.18);
+}
+
+.readonly-control {
+    background-color: #ffffff;
+    color: #102b5b;
+}
+
+.textarea-keterangan {
+    min-height: 105px;
+    resize: vertical;
+}
+
+.btn {
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 7px 16px;
+}
+
+.btn-success {
+    background-color: #159a3b;
+    border-color: #159a3b;
+}
+
+.btn-success:hover {
+    background-color: #128534;
+    border-color: #128534;
+}
+
+.btn-outline-secondary {
+    color: #6f6f6f;
+    border-color: #9c9c9c;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #eeeeee;
+    color: #333333;
+    border-color: #8c8c8c;
+}
+
+.alert {
+    font-size: 14px;
+    padding: 10px 12px;
+}
+
+.debt-section {
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+.select-card {
+    width: 100%;
+    border: 1px solid #9c9c9c;
+    border-radius: 8px;
+    padding: 10px 12px 12px;
+    background-color: #ffffff;
+}
+
+.select-card .form-label {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.select-card .form-select,
+.select-card .form-control {
+    height: 34px;
+    font-size: 14px;
+    color: #102b5b;
+}
+
+.product-cart-box {
+    min-height: 120px;
+}
+
+.debt-table {
+    min-width: 520px;
+}
+
+.debt-table thead th {
+    font-size: 13px;
+}
+
+.debt-table tbody td {
+    font-size: 13px;
+}
+
+.qty-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #d1d1d1;
+    border-radius: 6px;
+    padding: 2px 5px;
+}
+
+.qty-btn {
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+    color: #102b5b;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.qty-btn:hover {
+    background-color: #159a3b;
+    color: #ffffff;
+}
+
+.qty-number {
+    min-width: 16px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.btn-add-product {
+    font-size: 14px;
+    padding: 5px 10px;
+}
+
+.summary-card {
+    width: 100%;
+    border: 1px solid #9c9c9c;
+    border-radius: 8px;
+    padding: 8px 12px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.summary-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #102b5b;
+}
+
+.summary-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #102b5b;
+}
+
+.summary-price {
+    font-size: 17px;
+    font-weight: 700;
+    color: #159a3b;
+}
+
+.page-subtitle {
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+    color: #102b5b;
+    margin-bottom: 10px;
+}
+
+.textarea-catatan {
+    min-height: 55px;
+    resize: vertical;
+}
+
+.page-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-link {
+    color: #102b5b;
+    text-decoration: none;
+    font-size: 28px;
+    line-height: 1;
+    font-weight: 400;
+}
+
+.back-link:hover {
+    color: #159a3b;
+}
+
+.search-form {
+    width: 100%;
+}
+
+.search-input {
+    height: 34px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.product-list-box {
+    min-height: 430px;
+}
+
+.product-list-table {
+    min-width: 520px;
+}
+
+.product-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #102b5b;
+}
+
+.product-stock {
+    font-size: 11px;
+    color: #777777;
+}
+
+.empty-product-row td {
+    height: 370px;
+}
+
+.detail-info-card {
+    width: 100%;
+    border: 1px solid #9c9c9c;
+    border-radius: 8px;
+    padding: 12px;
+    background-color: #ffffff;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.info-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6f6f6f;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #102b5b;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-aktif {
+    color: #b7791f;
+    background-color: #fff3cd;
+    border: 1px solid #f0d98c;
+}
+
+.status-lunas {
+    color: #159a3b;
+    background-color: #e6f6ea;
+    border: 1px solid #9fd9af;
+}
+
+.payment-card {
+    width: 100%;
+    border: 1px solid #9c9c9c;
+    border-radius: 8px;
+    padding: 10px 12px;
+    background-color: #ffffff;
+}
+
+.payment-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #102b5b;
+    padding: 4px 0;
+}
+
+.payment-row span {
+    font-weight: 600;
+}
+
+.payment-row strong {
+    font-weight: 700;
+}
+
+/* =========================
+   LAPORAN HUTANG PDF / PRINT
+========================= */
+
+.report-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #f2f2f2;
+    padding: 24px;
+}
+
+.report-action {
+    max-width: 1100px;
+    margin: 0 auto 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.report-paper {
+    max-width: 1100px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 28px;
+    color: #102b5b;
+}
+
+.report-header {
+    text-align: center;
+    border-bottom: 2px solid #102b5b;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+}
+
+.report-header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.report-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.report-header p {
+    font-size: 13px;
+    margin: 0;
+    color: #555555;
+}
+
+.report-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.report-summary-item {
+    border: 1px solid #9c9c9c;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.report-summary-item span {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555555;
+    margin-bottom: 4px;
+}
+
+.report-summary-item strong {
+    font-size: 17px;
+    font-weight: 800;
+    color: #102b5b;
+}
+
+.report-section-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #102b5b;
+    margin-bottom: 10px;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    color: #102b5b;
+}
+
+.report-table th,
+.report-table td {
+    border: 1px solid #9c9c9c;
+    padding: 7px 8px;
+    vertical-align: top;
+}
+
+.report-table th {
+    background-color: #f3f6fb;
+    font-weight: 800;
+}
+
+.report-table small {
+    font-size: 10px;
+    color: #555555;
+}
+
+.report-detail-card {
+    border: 1px solid #9c9c9c;
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 18px;
+    page-break-inside: avoid;
+}
+
+.report-detail-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid #d8d8d8;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.report-detail-header h4 {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.report-detail-header p {
+    font-size: 12px;
+    margin: 0;
+    color: #555555;
+}
+
+.report-detail-total {
+    text-align: right;
+}
+
+.report-detail-total span {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #555555;
+}
+
+.report-detail-total strong {
+    font-size: 17px;
+    font-weight: 800;
+    color: #159a3b;
+}
+
+.report-customer-info {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.report-customer-info span,
+.report-payment-info span,
+.report-note span {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #555555;
+    margin-bottom: 2px;
+}
+
+.report-customer-info strong,
+.report-payment-info strong {
+    font-size: 12px;
+    font-weight: 800;
+    color: #102b5b;
+}
+
+.report-detail-table {
+    margin-bottom: 10px;
+}
+
+.report-payment-info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    border-top: 1px solid #d8d8d8;
+    padding-top: 10px;
+}
+
+.report-note {
+    margin-top: 10px;
+    border-top: 1px solid #d8d8d8;
+    padding-top: 8px;
+}
+
+.report-note p {
+    font-size: 12px;
+    margin: 0;
+    color: #102b5b;
+}
+
+.report-empty {
+    border: 1px solid #9c9c9c;
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+    color: #777777;
+}
+
+.report-footer {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 11px;
+    color: #555555;
+    border-top: 1px solid #d8d8d8;
+    padding-top: 10px;
+}
+
+@media (min-width: 768px) {
+    .page-wrapper {
+        padding: 40px;
+    }
+
+    .table-box {
+        min-height: 190px;
+    }
+
+    .form-section {
+        max-width: 560px;
+    }
+
+    .form-card {
+        padding: 26px 24px 22px;
+    }
+
+    .debt-section {
+        max-width: 720px;
+    }
+
+    .product-cart-box {
+        min-height: 150px;
+    }
+
+    .product-list-box {
+        min-height: 500px;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-wrapper {
+        padding: 28px 22px;
+    }
+
+    .section-title {
+        font-size: 16px;
+    }
+
+    .page-title {
+        font-size: 21px;
+    }
+
+    .form-card {
+        padding: 20px 16px 18px;
+    }
+
+    .form-label {
+        font-size: 16px;
+    }
+
+    .form-control,
+    .form-select {
+        font-size: 14px;
+    }
+
+    .table thead th,
+    .table tbody td {
+        font-size: 13px;
+    }
+
+    .btn,
+    .btn-add {
+        font-size: 14px;
+    }
+
+    .btn-action {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    .debt-section {
+        max-width: 100%;
+    }
+
+    .product-list-box {
+        min-height: 430px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .payment-row {
+        font-size: 13px;
+    }
+
+    .report-wrapper {
+        padding: 12px;
+    }
+
+    .report-paper {
+        padding: 18px;
+    }
+
+    .report-summary-grid,
+    .report-customer-info,
+    .report-payment-info {
+        grid-template-columns: 1fr;
+    }
+
+    .report-detail-header {
+        flex-direction: column;
+    }
+
+    .report-detail-total {
+        text-align: left;
+    }
+}
+
+@media print {
+    @page {
+        size: A4;
+        margin: 12mm;
+    }
+
+    body {
+        background-color: #ffffff;
+        color: #000000;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    .report-wrapper {
+        padding: 0;
+        background-color: #ffffff;
+    }
+
+    .report-paper {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+    }
+
+    .report-header {
+        margin-bottom: 14px;
+    }
+
+    .report-header h1 {
+        font-size: 22px;
+    }
+
+    .report-header h2 {
+        font-size: 17px;
+    }
+
+    .report-summary-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+    }
+
+    .report-summary-item {
+        padding: 7px;
+    }
+
+    .report-summary-item strong {
+        font-size: 13px;
+    }
+
+    .report-table {
+        font-size: 10px;
+    }
+
+    .report-table th,
+    .report-table td {
+        padding: 5px;
+    }
+
+    .report-detail-card {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin-bottom: 12px;
+        padding: 10px;
+    }
+
+    .report-detail-header h4 {
+        font-size: 13px;
+    }
+
+    .report-detail-header p {
+        font-size: 10px;
+    }
+
+    .report-detail-total strong {
+        font-size: 13px;
+    }
+
+    .report-section-title {
+        font-size: 14px;
+    }
+
+    .report-customer-info {
+        grid-template-columns: 1fr 1.5fr 1fr;
+        gap: 6px;
+    }
+
+    .report-payment-info {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+    }
+
+    .report-footer {
+        font-size: 10px;
+    }
+}
