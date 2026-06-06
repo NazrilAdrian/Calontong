@@ -39,7 +39,7 @@ function menu_items_for_role($role)
             'key' => 'users',
             'label' => 'Manajemen Pengguna',
             'icon' => 'bi-people-fill',
-            'url' => base_url('coming_soon.php?module=Manajemen%20Pengguna'),
+            'url' => base_url('pages/users/index.php'),
         ];
     }
 
@@ -54,7 +54,7 @@ function menu_items_for_role($role)
         'key' => 'transaksi',
         'label' => 'Transaksi & Penjualan',
         'icon' => 'bi-cart-fill',
-        'url' => base_url('coming_soon.php?module=Transaksi%20%26%20Penjualan'),
+        'url' => base_url('pages/transaksi/index.php'),
     ];
 
     if (in_array($role, ['owner', 'admin'], true)) {
@@ -70,7 +70,6 @@ function menu_items_for_role($role)
         'key' => 'hutang',
         'label' => 'Hutang Pelanggan',
         'icon' => 'bi-wallet-fill',
-        'url' => base_url('coming_soon.php?module=Hutang%20Pelanggan'),
         'url' => base_url('pages/Hutang/manajemen-hutang.php'),
     ];
 

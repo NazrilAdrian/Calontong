@@ -46,6 +46,7 @@ $messages = take_flash();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ca'lontong - Riwayat Transaksi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         .card-rounded {
             border-radius: 18px;
@@ -142,13 +143,27 @@ $messages = take_flash();
                                                 <?php endif; ?>
                                             </td>
                                             <td class="text-center">
-                                                <div class="d-inline-flex flex-wrap justify-content-center gap-2">
-                                                    <a href="detail.php?id=<?= (int) $transaction['id_transaksi']; ?>" class="btn btn-sm btn-outline-primary">Detail</a>
+                                                <div class="d-inline-flex flex-wrap justify-content-center gap-1">
+                                                    <a href="detail.php?id=<?= (int) $transaction['id_transaksi']; ?>"
+                                                    class="btn btn-sm btn-outline-primary"
+                                                    title="Detail Transaksi">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
                                                     <?php if (is_manager_role() && $transaction['status'] === 'selesai'): ?>
-                                                        <a href="edit.php?id=<?= (int) $transaction['id_transaksi']; ?>" class="btn btn-sm btn-outline-warning">Edit</a>
-                                                        <form method="post" action="batal.php" onsubmit="return confirm('Batalkan transaksi ini dan kembalikan stok?');">
+                                                        <a href="edit.php?id=<?= (int) $transaction['id_transaksi']; ?>"
+                                                        class="btn btn-sm btn-outline-warning"
+                                                        title="Edit Transaksi">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </a>
+                                                        <form method="post" action="batal.php"
+                                                            onsubmit="return confirm('Batalkan transaksi ini dan kembalikan stok?');"
+                                                            class="d-inline">
                                                             <input type="hidden" name="id" value="<?= (int) $transaction['id_transaksi']; ?>">
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger">Batal</button>
+                                                            <button type="submit"
+                                                                    class="btn btn-sm btn-outline-danger"
+                                                                    title="Hapus Transaksi">
+                                                                <i class="bi bi-trash3"></i>
+                                                            </button>
                                                         </form>
                                                     <?php endif; ?>
                                                 </div>
