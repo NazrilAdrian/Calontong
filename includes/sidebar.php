@@ -62,7 +62,7 @@ function menu_items_for_role($role)
             'key' => 'supplier',
             'label' => 'Supplier & Restock',
             'icon' => 'bi-truck',
-            'url' => base_url('coming_soon.php?module=Supplier%20%26%20Restock'),
+            'url' => base_url('pages/restock/index.php'),
         ];
     }
 
