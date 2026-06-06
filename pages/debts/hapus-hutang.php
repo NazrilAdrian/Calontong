@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/../config/koneksi.php";
+require_once __DIR__ . "/../../config/koneksi.php";
 
 $id_hutang = $_GET["id"] ?? null;
 

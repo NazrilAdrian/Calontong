@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/../config/koneksi.php";
+require_once __DIR__ . "/../../config/koneksi.php";
 
 $errors = [];
 
@@ -73,7 +73,7 @@ function e($value) {
         rel="stylesheet"
     >
 
-    <link rel="stylesheet" href="../assets/css/hutang.css">
+    <link rel="stylesheet" href="../../assets/css/hutang.css">
 </head>
 <body>
 

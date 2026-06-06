@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/../config/koneksi.php";
+require_once __DIR__ . "/../../config/koneksi.php";
 
 function e($value) {
     return htmlspecialchars($value ?? "-", ENT_QUOTES, "UTF-8");
@@ -110,7 +110,7 @@ $tanggalCetak = date("d/m/Y H:i");
         rel="stylesheet"
     >
 
-    <link rel="stylesheet" href="../assets/css/hutang.css">
+    <link rel="stylesheet" href="../../assets/css/hutang.css">
 </head>
 <body>
 
