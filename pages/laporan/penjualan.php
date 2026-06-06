@@ -9,9 +9,11 @@ $summary = [
     'total_pendapatan' => 0,
     'jumlah_transaksi' => 0,
 ];
+$totalLaba = 0; // Variabel baru untuk menampung laba bersih
 $transactions = [];
 
 if ($conn && $canAccess) {
+    // 1. Ambil summary pendapatan & jumlah transaksi
     $summary = fetch_one(
         'SELECT COALESCE(SUM(total_harga), 0) AS total_pendapatan, COUNT(*) AS jumlah_transaksi
          FROM transaksi
@@ -21,6 +23,20 @@ if ($conn && $canAccess) {
         [$tanggalMulai, $tanggalSelesai]
     ) ?: $summary;
 
+    // 2. KODE TAMBAHAN: Ambil summary Laba Bersih (Harga Jual - Harga Beli)
+    $dataLaba = fetch_one(
+        'SELECT SUM((dt.harga_satuan - p.harga_beli) * dt.jumlah) as laba_bersih 
+         FROM transaksi t 
+         JOIN detail_transaksi dt ON t.id_transaksi = dt.id_transaksi 
+         JOIN produk p ON dt.id_produk = p.id_produk 
+         WHERE t.status = "selesai"
+           AND DATE(t.created_at) BETWEEN ? AND ?',
+        'ss',
+        [$tanggalMulai, $tanggalSelesai]
+    );
+    $totalLaba = (float) ($dataLaba['laba_bersih'] ?? 0);
+
+    // 3. Ambil daftar riwayat transaksi
     $transactions = fetch_all(
         'SELECT t.id_transaksi, t.kode_transaksi, t.total_harga, t.uang_bayar, t.kembalian, t.created_at, u.nama_lengkap
          FROM transaksi t
@@ -58,7 +74,7 @@ $messages = take_flash();
             <div class="col-12 col-lg-11 col-xl-10 col-xxl-9">
                 <div class="d-flex flex-column flex-sm-row justify-content-between gap-3 mb-4">
                     <h1 class="h5 fw-bold mb-0">Laporan Penjualan</h1>
-                    <a href="../transaksi/index.php" class="btn btn-outline-secondary btn-rounded px-4">Riwayat transaksi</a>
+                    <a href="../transaksi/index.php" class="btn btn-outline-secondary btn-rounded px-4">Kembali</a>
                 </div>
 
                 <?php if (!$conn): ?>
@@ -102,22 +118,34 @@ $messages = take_flash();
                 </div>
 
                 <div class="row g-4 mb-4">
-                    <div class="col-12 col-md-6">
+                    
+                    <div class="col-12 col-md-4">
                         <div class="card border card-rounded h-100">
                             <div class="card-body">
-                                <div class="text-muted small">Total pendapatan</div>
-                                <div class="h4 fw-bold mb-0"><?= rupiah($summary['total_pendapatan'] ?? 0); ?></div>
+                                <div class="text-muted small">Total Pendapatan (Omzet)</div>
+                                <div class="h4 fw-bold mb-0 text-dark"><?= rupiah($summary['total_pendapatan'] ?? 0); ?></div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6">
-                        <div class="card border card-rounded h-100">
+
+                    <div class="col-12 col-md-4">
+                        <div class="card border card-rounded h-100 shadow-sm" style="background-color: #f8fff9;">
                             <div class="card-body">
-                                <div class="text-muted small">Jumlah transaksi selesai</div>
-                                <div class="h4 fw-bold mb-0"><?= (int) ($summary['jumlah_transaksi'] ?? 0); ?></div>
+                                <div class="text-muted small">Total Bersih (Laba/Profit)</div>
+                                <div class="h4 fw-bold mb-0 text-success"><?= rupiah($totalLaba); ?></div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-12 col-md-4">
+                        <div class="card border card-rounded h-100">
+                            <div class="card-body">
+                                <div class="text-muted small">Jumlah Transaksi Selesai</div>
+                                <div class="h4 fw-bold mb-0 text-dark"><?= (int) ($summary['jumlah_transaksi'] ?? 0); ?></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="card border card-rounded">

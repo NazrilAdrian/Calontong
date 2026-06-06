@@ -60,9 +60,15 @@ $messages = take_flash();
     <main class="container-fluid py-4">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-11 col-xl-10 col-xxl-9">
-                <div class="d-flex flex-column flex-sm-row justify-content-between gap-3 mb-4">
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3 mb-4">
                     <h1 class="h5 fw-bold mb-0">Riwayat Transaksi</h1>
-                    <a href="baru.php" class="btn btn-success btn-rounded px-4">Transaksi baru</a>
+                    
+                    <!-- Tombol ini hanya akan muncul jika yang login adalah Owner/Admin -->
+                    <?php if (is_manager_role()): ?>
+                        <a href="../laporan/penjualan.php" class="btn btn-outline-dark rounded-pill px-4">
+                            Lihat Laporan Penjualan
+                        </a>
+                    <?php endif; ?>
                 </div>
 
                 <?php if (!$conn): ?>
@@ -139,6 +145,7 @@ $messages = take_flash();
                                                 <div class="d-inline-flex flex-wrap justify-content-center gap-2">
                                                     <a href="detail.php?id=<?= (int) $transaction['id_transaksi']; ?>" class="btn btn-sm btn-outline-primary">Detail</a>
                                                     <?php if (is_manager_role() && $transaction['status'] === 'selesai'): ?>
+                                                        <a href="edit.php?id=<?= (int) $transaction['id_transaksi']; ?>" class="btn btn-sm btn-outline-warning">Edit</a>
                                                         <form method="post" action="batal.php" onsubmit="return confirm('Batalkan transaksi ini dan kembalikan stok?');">
                                                             <input type="hidden" name="id" value="<?= (int) $transaction['id_transaksi']; ?>">
                                                             <button type="submit" class="btn btn-sm btn-outline-danger">Batal</button>
@@ -152,6 +159,11 @@ $messages = take_flash();
                             </table>
                         </div>
                     </div>
+                </div>
+                <div class="text-center mt-5 mb-5">
+                    <a href="baru.php" class="btn btn-success px-4 py-2" style="border-radius: 8px; font-weight: 500;">
+                    Transaksi baru
+                    </a>
                 </div>
             </div>
         </div>

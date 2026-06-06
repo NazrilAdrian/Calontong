@@ -268,7 +268,7 @@ $messages = take_flash();
             <div class="col-12 col-lg-11 col-xl-10 col-xxl-9">
                 <div class="d-flex flex-column flex-sm-row justify-content-between gap-3 mb-4">
                     <h1 class="h5 fw-bold mb-0">Buat transaksi</h1>
-                    <a href="index.php" class="btn btn-outline-secondary rounded-pill px-4">Riwayat transaksi</a>
+                    <a href="index.php" class="btn btn-outline-secondary rounded-pill px-4">Kembali</a>
                 </div>
 
                 <?php if (!$conn): ?>

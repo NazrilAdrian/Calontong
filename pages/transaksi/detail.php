@@ -158,13 +158,18 @@ $messages = take_flash();
                         </div>
                     </div>
 
-                    <?php if (is_manager_role() && $transaction['status'] === 'selesai'): ?>
-                        <form method="post" action="batal.php" onsubmit="return confirm('Batalkan transaksi ini dan kembalikan stok?');" class="d-flex justify-content-center">
+                <?php if (is_manager_role() && $transaction['status'] === 'selesai'): ?>
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <a href="edit.php?id=<?= (int) $transaction['id_transaksi']; ?>" class="btn btn-outline-primary rounded-pill px-4">Edit Transaksi</a>    
+                        <form method="post" action="batal.php" onsubmit="return confirm('PENTING: Batalkan transaksi ini dan kembalikan stok gudang secara otomatis?');">
                             <input type="hidden" name="id" value="<?= (int) $transaction['id_transaksi']; ?>">
-                            <button type="submit" class="btn btn-outline-danger btn-rounded px-4">Batalkan transaksi</button>
+                            <button type="submit" class="btn btn-outline-danger rounded-pill px-4">Batalkan Transaksi</button>
                         </form>
-                    <?php endif; ?>
+                    </div>
                 <?php endif; ?>
+                
+                <?php endif; ?> 
+                </div>
             </div>
         </div>
     </main>
