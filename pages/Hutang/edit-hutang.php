@@ -1,9 +1,8 @@
 <?php
-require_once __DIR__ . "/../../config/koneksi.php";
+require_once __DIR__ . "/../../includes/auth_check.php";
+require_once __DIR__ . "/../../includes/sidebar.php";
 
-function e($value) {
-    return htmlspecialchars($value ?? "-", ENT_QUOTES, "UTF-8");
-}
+require_role(['owner', 'admin', 'kasir']);
 
 function rupiah($angka) {
     return "Rp " . number_format((float) $angka, 0, ",", ".");
@@ -17,6 +16,22 @@ function formatTanggal($tanggal) {
     return date("d/m/Y", strtotime($tanggal));
 }
 
+function bersihkanNominal($value) {
+    $value = trim($value ?? "");
+
+    if ($value === "") {
+        return 0;
+    }
+
+    $value = str_replace("Rp", "", $value);
+    $value = str_replace("rp", "", $value);
+    $value = str_replace(".", "", $value);
+    $value = str_replace(",", ".", $value);
+    $value = preg_replace("/[^0-9.]/", "", $value);
+
+    return (float) $value;
+}
+
 $id_hutang = $_GET["id"] ?? null;
 
 if (!$id_hutang || !is_numeric($id_hutang)) {
@@ -24,7 +39,9 @@ if (!$id_hutang || !is_numeric($id_hutang)) {
     exit;
 }
 
-$queryHutang = $pdo->prepare("
+$id_hutang = (int) $id_hutang;
+
+$queryHutang = $conn->prepare("
     SELECT
         h.id_hutang,
         h.kode_hutang,
@@ -42,21 +59,19 @@ $queryHutang = $pdo->prepare("
     FROM hutang h
     INNER JOIN pelanggan p ON h.id_pelanggan = p.id_pelanggan
     INNER JOIN users u ON h.id_user = u.id_user
-    WHERE h.id_hutang = :id_hutang
+    WHERE h.id_hutang = ?
 ");
 
-$queryHutang->execute([
-    ":id_hutang" => $id_hutang
-]);
-
-$hutang = $queryHutang->fetch(PDO::FETCH_ASSOC);
+$queryHutang->bind_param("i", $id_hutang);
+$queryHutang->execute();
+$hutang = $queryHutang->get_result()->fetch_assoc();
 
 if (!$hutang) {
     header("Location: manajemen-hutang.php");
     exit;
 }
 
-$queryDetail = $pdo->prepare("
+$queryDetail = $conn->prepare("
     SELECT
         dh.id_detail_hutang,
         dh.id_produk,
@@ -67,46 +82,98 @@ $queryDetail = $pdo->prepare("
         pr.kode_produk
     FROM detail_hutang dh
     INNER JOIN produk pr ON dh.id_produk = pr.id_produk
-    WHERE dh.id_hutang = :id_hutang
+    WHERE dh.id_hutang = ?
     ORDER BY dh.id_detail_hutang ASC
 ");
 
-$queryDetail->execute([
-    ":id_hutang" => $id_hutang
-]);
-
-$detailHutang = $queryDetail->fetchAll(PDO::FETCH_ASSOC);
+$queryDetail->bind_param("i", $id_hutang);
+$queryDetail->execute();
+$detailHutang = $queryDetail->get_result()->fetch_all(MYSQLI_ASSOC);
 
 $totalQty = 0;
 
 foreach ($detailHutang as $detail) {
     $totalQty += (int) $detail["jumlah"];
 }
+
+$errors = [];
+$tambah_bayar = "";
+$keterangan = $hutang["keterangan"];
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $tambah_bayar = trim($_POST["tambah_bayar"] ?? "");
+    $keterangan = trim($_POST["keterangan"] ?? "");
+
+    $nominalBayar = bersihkanNominal($tambah_bayar);
+
+    $total_hutang = (float) $hutang["total_hutang"];
+    $jumlah_terbayar_lama = (float) $hutang["jumlah_terbayar"];
+    $sisa_hutang_lama = (float) $hutang["sisa_hutang"];
+
+    if ($nominalBayar < 0) {
+        $errors[] = "Nominal cicilan tidak boleh kurang dari 0.";
+    }
+
+    if ($nominalBayar > $sisa_hutang_lama) {
+        $errors[] = "Nominal cicilan tidak boleh lebih besar dari sisa hutang.";
+    }
+
+    if ($hutang["status"] === "lunas" && $nominalBayar > 0) {
+        $errors[] = "Hutang sudah lunas, tidak bisa menambah cicilan lagi.";
+    }
+
+    if (empty($errors)) {
+        $jumlah_terbayar_baru = $jumlah_terbayar_lama + $nominalBayar;
+        $sisa_hutang_baru = $total_hutang - $jumlah_terbayar_baru;
+
+        if ($sisa_hutang_baru <= 0) {
+            $sisa_hutang_baru = 0;
+            $status_baru = "lunas";
+            $tanggal_lunas = date("Y-m-d");
+        } else {
+            $status_baru = "aktif";
+            $tanggal_lunas = null;
+        }
+
+        $update = $conn->prepare("
+            UPDATE hutang
+            SET
+                jumlah_terbayar = ?,
+                sisa_hutang = ?,
+                status = ?,
+                tanggal_lunas = ?,
+                keterangan = ?
+            WHERE id_hutang = ?
+        ");
+
+        $update->bind_param("ddsssi", $jumlah_terbayar_baru, $sisa_hutang_baru, $status_baru, $tanggal_lunas, $keterangan, $id_hutang);
+        $update->execute();
+
+        header("Location: manajemen-hutang.php?status=edit-hutang-berhasil");
+        exit;
+    }
+}
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Hutang - Ca'lontong</title>
+<?php render_page_start('Catat Pembayaran Hutang', 'hutang', ['assets/css/hutang.css']); ?>
 
-    <link 
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
-        rel="stylesheet"
-    >
+<div class="page-wrapper">
+    <section class="debt-section">
 
-    <link rel="stylesheet" href="../../assets/css/hutang.css">
-</head>
-<body>
+        <div class="page-title-row">
+            <a href="manajemen-hutang.php" class="back-link">←</a>
+            <h4 class="page-title mb-0">Catat Pembayaran Hutang</h4>
+        </div>
 
-    <main class="page-wrapper">
-        <section class="debt-section">
-
-            <div class="page-title-row">
-                <a href="manajemen-hutang.php" class="back-link">←</a>
-                <h4 class="page-title mb-0">Detail Hutang Kasbon</h4>
+        <?php if (!empty($errors)): ?>
+            <div class="alert alert-danger mt-3">
+                <?php foreach ($errors as $error): ?>
+                    <div><?= e($error); ?></div>
+                <?php endforeach; ?>
             </div>
+        <?php endif; ?>
+
+        <form action="" method="POST">
 
             <div class="select-card mt-3 mb-3">
                 <label class="form-label">Pelanggan</label>
@@ -194,7 +261,7 @@ foreach ($detailHutang as $detail) {
 
             <div class="payment-card mb-3">
                 <div class="payment-row">
-                    <span>Jumlah Terbayar</span>
+                    <span>Sudah Terbayar</span>
                     <strong><?= rupiah($hutang["jumlah_terbayar"]); ?></strong>
                 </div>
 
@@ -202,26 +269,53 @@ foreach ($detailHutang as $detail) {
                     <span>Sisa Hutang</span>
                     <strong class="text-success"><?= rupiah($hutang["sisa_hutang"]); ?></strong>
                 </div>
-
-                <div class="payment-row">
-                    <span>Tanggal Lunas</span>
-                    <strong><?= formatTanggal($hutang["tanggal_lunas"]); ?></strong>
-                </div>
             </div>
 
             <div class="mb-3">
-                <label class="page-subtitle">Catatan</label>
-                <textarea 
-                    class="form-control textarea-catatan readonly-control" 
-                    readonly
-                ><?= e($hutang["keterangan"]); ?></textarea>
+                <label for="tambah_bayar" class="form-label">
+                    Tambah Cicilan
+                </label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="tambah_bayar" 
+                    name="tambah_bayar"
+                    placeholder="Contoh: 5000"
+                    value="<?= e($tambah_bayar); ?>"
+                    <?= $hutang["status"] === "lunas" ? "readonly" : ""; ?>
+                >
             </div>
 
-        </section>
-    </main>
+            <div class="mb-3">
+                <label for="keterangan" class="page-subtitle">
+                    Catatan
+                </label>
 
-    <script 
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-    </script>
-</body>
-</html>
+                <textarea 
+                    class="form-control textarea-catatan" 
+                    id="keterangan" 
+                    name="keterangan"
+                    placeholder="Tulis catatan jika ada"
+                ><?= e($keterangan); ?></textarea>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-6">
+                    <a href="manajemen-hutang.php" class="btn btn-outline-secondary w-100">
+                        Batal
+                    </a>
+                </div>
+
+                <div class="col-6">
+                    <button type="submit" class="btn btn-success w-100">
+                        Simpan
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+    </section>
+</div>
+
+<?php render_page_end(); ?>
