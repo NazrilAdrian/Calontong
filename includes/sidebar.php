@@ -71,6 +71,7 @@ function menu_items_for_role($role)
         'label' => 'Hutang Pelanggan',
         'icon' => 'bi-wallet-fill',
         'url' => base_url('coming_soon.php?module=Hutang%20Pelanggan'),
+        'url' => base_url('pages/Hutang/manajemen-hutang.php'),
     ];
 
     return $items;
