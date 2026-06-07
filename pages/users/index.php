@@ -44,7 +44,7 @@ $totalOwner  = (int) $conn->query("SELECT COUNT(*) FROM users WHERE role='owner'
 $totalAdmin  = (int) $conn->query("SELECT COUNT(*) FROM users WHERE role='admin'")->fetch_row()[0];
 $totalKasir  = (int) $conn->query("SELECT COUNT(*) FROM users WHERE role='kasir'")->fetch_row()[0];
 
-render_page_start('Manajemen Pengguna', 'users');
+render_page_start('Manajemen Pengguna', 'users', ['assets/css/users.css']);
 ?>
 
 <div class="page-header mb-4">
@@ -58,7 +58,7 @@ render_page_start('Manajemen Pengguna', 'users');
 </div>
 
 <!-- Statistik -->
-<div class="stats-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(150px,1fr));">
+<div class="stats-grid users-stats-grid mb-4">
     <article class="stat-card green">
         <span class="stat-icon"><i class="bi bi-people-fill"></i></span>
         <div><h2>Total Pengguna</h2><strong><?= e($totalUsers); ?></strong></div>
@@ -116,7 +116,7 @@ render_page_start('Manajemen Pengguna', 'users');
 <div class="panel-card">
     <?php if (empty($users)): ?>
         <div class="text-center py-5 text-muted">
-            <i class="bi bi-person-slash" style="font-size:2.5rem;"></i>
+            <i class="bi bi-person-slash users-empty-icon"></i>
             <p class="mt-2">Tidak ada pengguna yang ditemukan.</p>
         </div>
     <?php else: ?>
@@ -124,12 +124,12 @@ render_page_start('Manajemen Pengguna', 'users');
             <table class="table align-middle mb-0">
                 <thead>
                     <tr>
-                        <th style="width:3rem;">#</th>
+                        <th class="users-col-number">#</th>
                         <th>Nama Lengkap</th>
                         <th>Username</th>
                         <th>Role</th>
                         <th>Dibuat</th>
-                        <th class="text-center" style="width:10rem;">Aksi</th>
+                        <th class="text-center users-col-actions">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

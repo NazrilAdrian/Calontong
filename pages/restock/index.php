@@ -46,7 +46,7 @@ if ($purchaseParams) {
 $purchaseStmt->execute();
 $purchases = $purchaseStmt->get_result();
 
-render_page_start('Supplier & Restock', 'supplier', ['assets/css/produk.css', 'assets/css/module4.css']);
+render_page_start('Supplier & Restock', 'supplier', ['assets/css/supplier-restock.css']);
 ?>
 <section class="module-section module4-wrap" id="daftar-supplier">
     <div class="module4-toolbar">

@@ -41,7 +41,7 @@ $sql .= ' ORDER BY t.created_at DESC, t.id_transaksi DESC';
 $transactions = $conn ? fetch_all($sql, $types, $params) : [];
 $messages = take_flash();
 ?>
-<?php render_page_start('Riwayat Transaksi', 'transaksi'); ?>
+<?php render_page_start('Riwayat Transaksi', 'transaksi', ['assets/css/transaksi.css']); ?>
 <div class="container-fluid py-4">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-11 col-xl-10 col-xxl-9">
@@ -160,7 +160,7 @@ $messages = take_flash();
                     </div>
                 </div>
                 <div class="text-center mt-5 mb-5">
-                    <a href="baru.php" class="btn btn-success px-4 py-2" style="border-radius: 8px; font-weight: 500;">
+                    <a href="baru.php" class="btn btn-success btn-new-transaction px-4 py-2">
                     Transaksi baru
                     </a>
                 </div>

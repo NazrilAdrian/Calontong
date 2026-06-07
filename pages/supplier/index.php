@@ -6,7 +6,7 @@ require_role(['owner', 'admin']);
 
 $suppliers = module4_fetch_suppliers($conn);
 
-render_page_start('Daftar Supplier', 'supplier', ['assets/css/produk.css', 'assets/css/module4.css']);
+render_page_start('Daftar Supplier', 'supplier', ['assets/css/supplier-restock.css']);
 ?>
 <section class="module-section module4-wrap">
     <div class="module4-toolbar">

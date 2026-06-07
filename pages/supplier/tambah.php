@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-render_page_start('Tambah Supplier', 'supplier', ['assets/css/produk.css', 'assets/css/module4.css']);
+render_page_start('Tambah Supplier', 'supplier', ['assets/css/supplier-restock.css']);
 ?>
 <section class="form-section">
     <h1 class="form-title">Tambah Supplier</h1>

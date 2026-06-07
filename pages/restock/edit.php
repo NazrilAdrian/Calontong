@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-render_page_start('Edit Restock', 'supplier', ['assets/css/produk.css', 'assets/css/module4.css']);
+render_page_start('Edit Restock', 'supplier', ['assets/css/supplier-restock.css']);
 ?>
 <section class="form-section module4-wrap" data-restock-page>
     <h1 class="form-title">Edit Restock</h1>

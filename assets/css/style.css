@@ -503,15 +503,3 @@ a {
     }
 }
 
-/* Transaksi & laporan */
-.card-rounded {
-    border-radius: 18px;
-}
-
-.btn-rounded {
-    border-radius: 999px;
-}
-
-.qty-input {
-    max-width: 90px;
-}

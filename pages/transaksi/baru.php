@@ -242,7 +242,7 @@ $cart = cart_items();
 $total = cart_total();
 $messages = take_flash();
 ?>
-<?php render_page_start('Transaksi Baru', 'transaksi'); ?>
+<?php render_page_start('Transaksi Baru', 'transaksi', ['assets/css/transaksi.css']); ?>
 <div class="container-fluid py-4">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-11 col-xl-10 col-xxl-9">

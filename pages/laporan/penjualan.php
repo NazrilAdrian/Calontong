@@ -55,7 +55,7 @@ if ($conn && $canAccess) {
 
 $messages = take_flash();
 ?>
-<?php render_page_start('Laporan Penjualan', 'transaksi'); ?>
+<?php render_page_start('Laporan Penjualan', 'transaksi', ['assets/css/transaksi.css']); ?>
 <div class="container-fluid py-4">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-11 col-xl-10 col-xxl-9">
@@ -116,7 +116,7 @@ $messages = take_flash();
                     </div>
 
                     <div class="col-12 col-md-4">
-                        <div class="card border card-rounded h-100 shadow-sm" style="background-color: #f8fff9;">
+                        <div class="card border card-rounded sales-profit-card h-100 shadow-sm">
                             <div class="card-body">
                                 <div class="text-muted small">Total Bersih (Laba/Profit)</div>
                                 <div class="h4 fw-bold mb-0 text-success"><?= rupiah($totalLaba); ?></div>

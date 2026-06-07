@@ -16,7 +16,7 @@ if (!$purchase) {
     redirect('pages/restock/index.php');
 }
 
-render_page_start('Detail Restock', 'supplier', ['assets/css/produk.css', 'assets/css/module4.css']);
+render_page_start('Detail Restock', 'supplier', ['assets/css/supplier-restock.css']);
 ?>
 <section class="form-section module4-wrap">
     <h1 class="form-title">Detail Restock</h1>
@@ -77,7 +77,7 @@ render_page_start('Detail Restock', 'supplier', ['assets/css/produk.css', 'asset
         <?php if (!empty($purchase['keterangan'])): ?>
             <div class="mb-3">
                 <label class="form-label">Catatan</label>
-                <div class="form-control" style="min-height: 90px; white-space: pre-wrap; height: auto;"><?= e($purchase['keterangan']); ?></div>
+                <div class="form-control restock-note-control"><?= e($purchase['keterangan']); ?></div>
             </div>
         <?php endif; ?>
 

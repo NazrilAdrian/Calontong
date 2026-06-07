@@ -1,0 +1,21 @@
+/* Transaksi & Laporan Penjualan */
+.card-rounded {
+    border-radius: 18px;
+}
+
+.btn-rounded {
+    border-radius: 999px;
+}
+
+.qty-input {
+    max-width: 90px;
+}
+
+.sales-profit-card {
+    background-color: #f8fff9;
+}
+
+.btn-new-transaction {
+    border-radius: 8px;
+    font-weight: 500;
+}

@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-render_page_start('Tambah Pengguna', 'users');
+render_page_start('Tambah Pengguna', 'users', ['assets/css/users.css']);
 ?>
 
 <div class="page-header mb-4">
@@ -74,7 +74,7 @@ render_page_start('Tambah Pengguna', 'users');
     </div>
 </div>
 
-<div class="panel-card" style="max-width:540px;">
+<div class="panel-card user-form-card">
     <form method="post" novalidate>
 
         <!-- Nama Lengkap -->

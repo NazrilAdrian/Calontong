@@ -1,0 +1,50 @@
+/* Manajemen Pengguna */
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.page-title {
+    margin: 0;
+    color: var(--blue);
+    font-size: clamp(1.35rem, 2vw, 1.75rem);
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.page-subtitle {
+    margin: 4px 0 0;
+}
+
+.users-stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.user-form-card {
+    max-width: 540px;
+}
+
+.users-empty-icon {
+    font-size: 2.5rem;
+}
+
+.users-col-number {
+    width: 3rem;
+}
+
+.users-col-actions {
+    width: 10rem;
+}
+
+@media (max-width: 575.98px) {
+    .page-header .btn {
+        width: 100%;
+    }
+
+    .users-col-actions {
+        width: 7.5rem;
+    }
+}
