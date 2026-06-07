@@ -81,7 +81,7 @@ render_page_start('Dashboard', 'dashboard');
 
         <a 
             class="btn btn-primary btn-lg cashier-primary" 
-            href="<?= e(base_url('coming_soon.php?module=Transaksi%20Baru')); ?>"
+            href="<?= e(base_url('pages/transaksi/baru.php')); ?>"
         >
             <i class="bi bi-plus-square-fill"></i> Buat Transaksi Baru
         </a>
@@ -139,14 +139,14 @@ render_page_start('Dashboard', 'dashboard');
                 'value' => format_rupiah($stats['penjualan_hari_ini']),
                 'icon' => 'bi-cart-check',
                 'color' => 'green',
-                'url' => base_url('coming_soon.php?module=Laporan%20Penjualan')
+                'url' => base_url('pages/laporan/penjualan.php')
             ],
             [
                 'title' => 'Jumlah Transaksi Hari Ini',
                 'value' => $stats['jumlah_transaksi'],
                 'icon' => 'bi-receipt',
                 'color' => 'green',
-                'url' => base_url('coming_soon.php?module=Riwayat%20Transaksi')
+                'url' => base_url('pages/transaksi/index.php')
             ],
             [
                 'title' => 'Total Hutang Aktif',

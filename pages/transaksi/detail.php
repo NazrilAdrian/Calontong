@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../../includes/auth_check.php';
+require_once __DIR__ . '/../../includes/sidebar.php';
 require_once __DIR__ . '/_helpers.php';
 
 $conn = calontong_db();
@@ -41,25 +43,8 @@ if ($conn && $idTransaksi > 0) {
 
 $messages = take_flash();
 ?>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ca'lontong - Detail Transaksi</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .card-rounded {
-            border-radius: 18px;
-        }
-
-        .btn-rounded {
-            border-radius: 999px;
-        }
-    </style>
-</head>
-<body class="bg-white">
-    <main class="container-fluid py-4">
+<?php render_page_start('Detail Transaksi', 'transaksi'); ?>
+<div class="container-fluid py-4">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-11 col-xl-10 col-xxl-9">
                 <div class="d-flex flex-column flex-sm-row justify-content-between gap-3 mb-4">
@@ -172,8 +157,6 @@ $messages = take_flash();
                 </div>
             </div>
         </div>
-    </main>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<?php render_page_end(); ?>

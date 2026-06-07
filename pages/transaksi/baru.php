@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../../includes/auth_check.php';
+require_once __DIR__ . '/../../includes/sidebar.php';
 require_once __DIR__ . '/_helpers.php';
 
 $conn = calontong_db();
@@ -240,30 +242,8 @@ $cart = cart_items();
 $total = cart_total();
 $messages = take_flash();
 ?>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ca'lontong - Transaksi Baru</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .qty-btn {
-            width: 32px;
-            height: 32px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .qty-input {
-            width: 80px;
-        }
-    </style>
-</head>
-<body class="bg-white">
-    <main class="container-fluid py-4">
+<?php render_page_start('Transaksi Baru', 'transaksi'); ?>
+<div class="container-fluid py-4">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-11 col-xl-10 col-xxl-9">
                 <div class="d-flex flex-column flex-sm-row justify-content-between gap-3 mb-4">
@@ -439,10 +419,9 @@ $messages = take_flash();
                 </div>
             </div>
         </div>
-    </main>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+<script>
         const uangBayar = document.getElementById('uangBayar');
         const totalText = document.getElementById('totalText');
         const kembalianText = document.getElementById('kembalianText');
@@ -470,5 +449,4 @@ $messages = take_flash();
             updateKembalian();
         }
     </script>
-</body>
-</html>
+<?php render_page_end(); ?>

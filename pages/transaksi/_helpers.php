@@ -66,6 +66,14 @@ function is_manager_role()
 
 function flash($type, $message)
 {
+    if (
+        !isset($_SESSION['flash']) ||
+        !is_array($_SESSION['flash']) ||
+        (isset($_SESSION['flash']['type']) && isset($_SESSION['flash']['message']))
+    ) {
+        $_SESSION['flash'] = [];
+    }
+
     $_SESSION['flash'][] = [
         'type' => $type,
         'message' => $message,
@@ -74,8 +82,24 @@ function flash($type, $message)
 
 function take_flash()
 {
-    $messages = $_SESSION['flash'] ?? [];
+    $flash = $_SESSION['flash'] ?? [];
     unset($_SESSION['flash']);
+
+    if (empty($flash)) {
+        return [];
+    }
+
+    if (isset($flash['type']) && isset($flash['message'])) {
+        return [$flash];
+    }
+
+    $messages = [];
+
+    foreach ($flash as $item) {
+        if (is_array($item) && isset($item['type'], $item['message'])) {
+            $messages[] = $item;
+        }
+    }
 
     return $messages;
 }
