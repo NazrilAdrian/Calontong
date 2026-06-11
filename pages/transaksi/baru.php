@@ -1,9 +1,7 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
 require_once __DIR__ . '/../../includes/sidebar.php';
-require_once __DIR__ . '/_helpers.php';
 
-$conn = calontong_db();
 $search = trim($_GET['q'] ?? '');
 $uangBayarInput = '';
 
@@ -11,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if (!$conn) {
-        flash('danger', 'Koneksi database belum tersedia. Pastikan config.php sudah dibuat dan menghasilkan variabel $conn.');
+        add_flash('danger', 'Koneksi database belum tersedia. Pastikan config.php sudah dibuat dan menghasilkan variabel $conn.');
         redirect_to('baru.php');
     }
 
@@ -25,16 +23,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
 
         if (!$produk) {
-            flash('danger', 'Produk tidak ditemukan.');
+            add_flash('danger', 'Produk tidak ditemukan.');
         } elseif ((int) $produk['stok'] < $jumlah) {
-            flash('danger', 'Stok ' . $produk['nama_produk'] . ' tidak cukup.');
+            add_flash('danger', 'Stok ' . $produk['nama_produk'] . ' tidak cukup.');
         } else {
             $cart = cart_items();
             $existingQty = isset($cart[$idProduk]) ? (int) $cart[$idProduk]['jumlah'] : 0;
             $newQty = $existingQty + $jumlah;
 
             if ($newQty > (int) $produk['stok']) {
-                flash('danger', 'Jumlah di keranjang melebihi stok ' . $produk['nama_produk'] . '.');
+                add_flash('danger', 'Jumlah di keranjang melebihi stok ' . $produk['nama_produk'] . '.');
             } else {
                 $cart[$idProduk] = [
                     'id_produk' => (int) $produk['id_produk'],
@@ -46,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'subtotal' => $newQty * (float) $produk['harga_jual'],
                 ];
                 set_cart_items($cart);
-                flash('success', $produk['nama_produk'] . ' ditambahkan ke keranjang.');
+                add_flash('success', $produk['nama_produk'] . ' ditambahkan ke keranjang.');
             }
         }
 
@@ -78,13 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (!$produk) {
                 unset($cart[$idProduk]);
-                flash('warning', 'Ada produk yang sudah tidak ditemukan dan dihapus dari keranjang.');
+                add_flash('warning', 'Ada produk yang sudah tidak ditemukan dan dihapus dari keranjang.');
                 continue;
             }
 
             if ($jumlah > (int) $produk['stok']) {
                 $jumlah = (int) $produk['stok'];
-                flash('warning', 'Jumlah ' . $produk['nama_produk'] . ' disesuaikan dengan stok tersedia.');
+                add_flash('warning', 'Jumlah ' . $produk['nama_produk'] . ' disesuaikan dengan stok tersedia.');
             }
 
             $cart[$idProduk] = [
@@ -99,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         set_cart_items($cart);
-        flash('success', 'Keranjang diperbarui.');
+        add_flash('success', 'Keranjang diperbarui.');
         redirect_to('baru.php');
     }
 
@@ -108,13 +106,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $cart = cart_items();
         unset($cart[$idProduk]);
         set_cart_items($cart);
-        flash('success', 'Produk dihapus dari keranjang.');
+        add_flash('success', 'Produk dihapus dari keranjang.');
         redirect_to('baru.php');
     }
 
     if ($action === 'clear') {
         unset($_SESSION['cart']);
-        flash('success', 'Keranjang dikosongkan.');
+        add_flash('success', 'Keranjang dikosongkan.');
         redirect_to('baru.php');
     }
 
@@ -124,18 +122,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $uangBayarInput = (string) ($_POST['uang_bayar'] ?? '');
 
         if (empty($cart)) {
-            flash('danger', 'Keranjang masih kosong.');
+            add_flash('danger', 'Keranjang masih kosong.');
             redirect_to('baru.php');
         }
 
         if (current_user_id() <= 0) {
-            flash('danger', 'Sesi pengguna belum tersedia. Silakan login sebelum membuat transaksi.');
+            add_flash('danger', 'Sesi pengguna belum tersedia. Silakan login sebelum membuat transaksi.');
             redirect_to('baru.php');
         }
 
         $totalKeranjang = cart_total();
         if ($uangBayar < $totalKeranjang) {
-            flash('danger', 'Uang bayar kurang dari total belanja.');
+            add_flash('danger', 'Uang bayar kurang dari total belanja.');
             redirect_to('baru.php');
         }
 
@@ -213,11 +211,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $conn->commit();
 
             unset($_SESSION['cart']);
-            flash('success', 'Transaksi ' . $kodeTransaksi . ' berhasil disimpan.');
+            add_flash('success', 'Transaksi ' . $kodeTransaksi . ' berhasil disimpan.');
             redirect_to('detail.php?id=' . $idTransaksi);
         } catch (Exception $e) {
             $conn->rollback();
-            flash('danger', $e->getMessage());
+            add_flash('danger', $e->getMessage());
             redirect_to('baru.php');
         }
     }
@@ -258,8 +256,8 @@ $messages = take_flash();
                 <?php endif; ?>
 
                 <?php foreach ($messages as $message): ?>
-                    <div class="alert alert-<?= h($message['type']); ?> alert-dismissible fade show" role="alert">
-                        <?= h($message['message']); ?>
+                    <div class="alert alert-<?= e($message['type']); ?> alert-dismissible fade show" role="alert">
+                        <?= e($message['message']); ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
                     </div>
                 <?php endforeach; ?>
@@ -271,7 +269,7 @@ $messages = take_flash();
                                 <div class="fw-semibold mb-2">Cari produk</div>
                                 <form class="input-group mb-3" method="get">
                                     <span class="input-group-text bg-white">Cari</span>
-                                    <input type="text" class="form-control" name="q" value="<?= h($search); ?>" placeholder="Ketik nama atau kode produk">
+                                    <input type="text" class="form-control" name="q" value="<?= e($search); ?>" placeholder="Ketik nama atau kode produk">
                                     <button type="submit" class="btn btn-success">Cari</button>
                                 </form>
 
@@ -299,21 +297,21 @@ $messages = take_flash();
                                                 <?php $formId = 'add-product-' . (int) $product['id_produk']; ?>
                                                 <tr>
                                                     <td>
-                                                        <div class="fw-semibold"><?= h($product['nama_produk']); ?></div>
-                                                        <div class="small text-muted"><?= h($product['kode_produk'] ?: '-'); ?></div>
+                                                        <div class="fw-semibold"><?= e($product['nama_produk']); ?></div>
+                                                        <div class="small text-muted"><?= e($product['kode_produk'] ?: '-'); ?></div>
                                                     </td>
-                                                    <td class="text-end"><?= rupiah($product['harga_jual']); ?></td>
+                                                    <td class="text-end"><?= format_rupiah($product['harga_jual']); ?></td>
                                                     <td class="text-center">
-                                                        <?= (int) $product['stok']; ?> <?= h($product['satuan'] ?? ''); ?>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <input type="number" form="<?= h($formId); ?>" class="form-control form-control-sm qty-input mx-auto" name="jumlah" value="1" min="1" max="<?= (int) $product['stok']; ?>">
+                                                        <?= (int) $product['stok']; ?> <?= e($product['satuan'] ?? ''); ?>
                                                     </td>
                                                     <td class="text-center">
-                                                        <form method="post" id="<?= h($formId); ?>">
+                                                        <input type="number" form="<?= e($formId); ?>" class="form-control form-control-sm qty-input mx-auto" name="jumlah" value="1" min="1" max="<?= (int) $product['stok']; ?>">
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <form method="post" id="<?= e($formId); ?>">
                                                             <input type="hidden" name="action" value="add">
                                                             <input type="hidden" name="id_produk" value="<?= (int) $product['id_produk']; ?>">
-                                                            <input type="hidden" name="q" value="<?= h($search); ?>">
+                                                            <input type="hidden" name="q" value="<?= e($search); ?>">
                                                             <button type="submit" class="btn btn-sm btn-outline-success" <?= ((int) $product['stok'] <= 0) ? 'disabled' : ''; ?>>Tambah</button>
                                                         </form>
                                                     </td>
@@ -362,14 +360,14 @@ $messages = take_flash();
                                                 <?php foreach ($cart as $item): ?>
                                                     <tr>
                                                         <td>
-                                                            <div class="fw-semibold"><?= h($item['nama_produk']); ?></div>
-                                                            <div class="small text-muted">Stok: <?= (int) $item['stok']; ?> <?= h($item['satuan'] ?? ''); ?></div>
+                                                            <div class="fw-semibold"><?= e($item['nama_produk']); ?></div>
+                                                            <div class="small text-muted">Stok: <?= (int) $item['stok']; ?> <?= e($item['satuan'] ?? ''); ?></div>
                                                         </td>
-                                                        <td class="text-end"><?= rupiah($item['harga_satuan']); ?></td>
+                                                        <td class="text-end"><?= format_rupiah($item['harga_satuan']); ?></td>
                                                         <td class="text-center">
                                                             <input type="number" class="form-control form-control-sm qty-input mx-auto" name="jumlah[<?= (int) $item['id_produk']; ?>]" value="<?= (int) $item['jumlah']; ?>" min="0" max="<?= (int) $item['stok']; ?>">
                                                         </td>
-                                                        <td class="text-end"><?= rupiah($item['subtotal']); ?></td>
+                                                        <td class="text-end"><?= format_rupiah($item['subtotal']); ?></td>
                                                         <td class="text-end">
                                                             <button type="submit" form="remove-<?= (int) $item['id_produk']; ?>" class="btn btn-sm btn-outline-danger">Hapus</button>
                                                         </td>
@@ -399,15 +397,15 @@ $messages = take_flash();
                                     <input type="hidden" name="action" value="checkout">
                                     <div class="d-flex justify-content-between mb-2">
                                         <span class="fw-semibold">Total</span>
-                                        <span class="fw-semibold" id="totalText" data-total="<?= (float) $total; ?>"><?= rupiah($total); ?></span>
+                                        <span class="fw-semibold" id="totalText" data-total="<?= (float) $total; ?>"><?= format_rupiah($total); ?></span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="uangBayar" class="form-label">Uang pembayaran</label>
-                                        <input type="number" class="form-control" id="uangBayar" name="uang_bayar" min="0" step="100" value="<?= h($uangBayarInput); ?>" placeholder="Masukkan nominal" <?= empty($cart) ? 'disabled' : ''; ?>>
+                                        <input type="number" class="form-control" id="uangBayar" name="uang_bayar" min="0" step="100" value="<?= e($uangBayarInput); ?>" placeholder="Masukkan nominal" <?= empty($cart) ? 'disabled' : ''; ?>>
                                     </div>
                                     <div class="d-flex justify-content-between mb-3">
                                         <span class="fw-semibold">Kembalian</span>
-                                        <span class="fw-semibold" id="kembalianText"><?= rupiah(0); ?></span>
+                                        <span class="fw-semibold" id="kembalianText"><?= format_rupiah(0); ?></span>
                                     </div>
                                     <div class="d-grid">
                                         <button type="submit" class="btn btn-success rounded-pill" <?= empty($cart) ? 'disabled' : ''; ?>>Selesaikan transaksi</button>

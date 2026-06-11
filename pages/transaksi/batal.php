@@ -1,26 +1,24 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
-require_once __DIR__ . '/_helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     redirect_to('index.php');
 }
 
-$conn = calontong_db();
 $idTransaksi = (int) ($_POST['id'] ?? 0);
 
 if (!$conn) {
-    flash('danger', 'Koneksi database belum tersedia.');
+    add_flash('danger', 'Koneksi database belum tersedia.');
     redirect_to('index.php');
 }
 
-if (!is_manager_role()) {
-    flash('danger', 'Hanya owner/admin yang bisa membatalkan transaksi.');
+if (!is_owner_or_admin()) {
+    add_flash('danger', 'Hanya owner/admin yang bisa membatalkan transaksi.');
     redirect_to('detail.php?id=' . $idTransaksi);
 }
 
 if ($idTransaksi <= 0) {
-    flash('danger', 'ID transaksi tidak valid.');
+    add_flash('danger', 'ID transaksi tidak valid.');
     redirect_to('index.php');
 }
 
@@ -60,7 +58,7 @@ try {
     $stmtStok->close();
 
     $stmt = $conn->prepare('UPDATE transaksi SET status = "batal", keterangan = ? WHERE id_transaksi = ?');
-    $keterangan = 'Dibatalkan oleh ' . (current_role() ?: 'user') . ' pada ' . date('Y-m-d H:i:s');
+    $keterangan = 'Dibatalkan oleh ' . (current_user_role() ?: 'user') . ' pada ' . date('Y-m-d H:i:s');
 
     $stmt->bind_param('si', $keterangan, $idTransaksi);
     $stmt->execute();
@@ -68,11 +66,11 @@ try {
 
     $conn->commit();
 
-    flash('success', 'Transaksi berhasil dibatalkan dan stok sudah dikembalikan.');
+    add_flash('success', 'Transaksi berhasil dibatalkan dan stok sudah dikembalikan.');
 } catch (Exception $e) {
     $conn->rollback();
 
-    flash('danger', $e->getMessage());
+    add_flash('danger', $e->getMessage());
 }
 
 redirect_to('detail.php?id=' . $idTransaksi);

@@ -1,11 +1,9 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
 require_once __DIR__ . '/../../includes/sidebar.php';
-require_once __DIR__ . '/../transaksi/_helpers.php';
-
 require_role(['owner', 'admin']);
 
-$conn = calontong_db();
+$conn = $conn ?? null;
 $tanggalMulai = $_GET['tanggal_mulai'] ?? date('Y-m-01');
 $tanggalSelesai = $_GET['tanggal_selesai'] ?? date('Y-m-d');
 $canAccess = true;
@@ -77,8 +75,8 @@ $messages = take_flash();
                 <?php endif; ?>
 
                 <?php foreach ($messages as $message): ?>
-                    <div class="alert alert-<?= h($message['type']); ?> alert-dismissible fade show" role="alert">
-                        <?= h($message['message']); ?>
+                    <div class="alert alert-<?= e($message['type']); ?> alert-dismissible fade show" role="alert">
+                        <?= e($message['message']); ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
                     </div>
                 <?php endforeach; ?>
@@ -89,11 +87,11 @@ $messages = take_flash();
                         <form method="get" class="row g-3 align-items-end">
                             <div class="col-12 col-md-5">
                                 <label for="tanggalMulai" class="form-label">Dari tanggal</label>
-                                <input type="date" class="form-control" id="tanggalMulai" name="tanggal_mulai" value="<?= h($tanggalMulai); ?>">
+                                <input type="date" class="form-control" id="tanggalMulai" name="tanggal_mulai" value="<?= e($tanggalMulai); ?>">
                             </div>
                             <div class="col-12 col-md-5">
                                 <label for="tanggalSelesai" class="form-label">Sampai tanggal</label>
-                                <input type="date" class="form-control" id="tanggalSelesai" name="tanggal_selesai" value="<?= h($tanggalSelesai); ?>">
+                                <input type="date" class="form-control" id="tanggalSelesai" name="tanggal_selesai" value="<?= e($tanggalSelesai); ?>">
                             </div>
                             <div class="col-12 col-md-2">
                                 <div class="d-grid">
@@ -110,7 +108,7 @@ $messages = take_flash();
                         <div class="card border card-rounded h-100">
                             <div class="card-body">
                                 <div class="text-muted small">Total Pendapatan (Omzet)</div>
-                                <div class="h4 fw-bold mb-0 text-dark"><?= rupiah($summary['total_pendapatan'] ?? 0); ?></div>
+                                <div class="h4 fw-bold mb-0 text-dark"><?= format_rupiah($summary['total_pendapatan'] ?? 0); ?></div>
                             </div>
                         </div>
                     </div>
@@ -119,7 +117,7 @@ $messages = take_flash();
                         <div class="card border card-rounded sales-profit-card h-100 shadow-sm">
                             <div class="card-body">
                                 <div class="text-muted small">Total Bersih (Laba/Profit)</div>
-                                <div class="h4 fw-bold mb-0 text-success"><?= rupiah($totalLaba); ?></div>
+                                <div class="h4 fw-bold mb-0 text-success"><?= format_rupiah($totalLaba); ?></div>
                             </div>
                         </div>
                     </div>
@@ -162,14 +160,14 @@ $messages = take_flash();
                                         <tr>
                                             <td>
                                                 <a href="../transaksi/detail.php?id=<?= (int) $transaction['id_transaksi']; ?>" class="text-decoration-none">
-                                                    <?= h($transaction['kode_transaksi']); ?>
+                                                    <?= e($transaction['kode_transaksi']); ?>
                                                 </a>
                                             </td>
-                                            <td><?= h(date('d/m/Y H:i', strtotime($transaction['created_at']))); ?></td>
-                                            <td><?= h($transaction['nama_lengkap']); ?></td>
-                                            <td class="text-end"><?= rupiah($transaction['total_harga']); ?></td>
-                                            <td class="text-end"><?= rupiah($transaction['uang_bayar']); ?></td>
-                                            <td class="text-end"><?= rupiah($transaction['kembalian']); ?></td>
+                                            <td><?= e(date('d/m/Y H:i', strtotime($transaction['created_at']))); ?></td>
+                                            <td><?= e($transaction['nama_lengkap']); ?></td>
+                                            <td class="text-end"><?= format_rupiah($transaction['total_harga']); ?></td>
+                                            <td class="text-end"><?= format_rupiah($transaction['uang_bayar']); ?></td>
+                                            <td class="text-end"><?= format_rupiah($transaction['kembalian']); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>

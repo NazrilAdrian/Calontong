@@ -1,9 +1,7 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
 require_once __DIR__ . '/../../includes/sidebar.php';
-require_once __DIR__ . '/_helpers.php';
 
-$conn = calontong_db();
 $idTransaksi = (int) ($_GET['id'] ?? 0);
 $transaction = null;
 $details = [];
@@ -13,7 +11,7 @@ if ($conn && $idTransaksi > 0) {
     $types = 'i';
     $params = [$idTransaksi];
 
-    if (current_role() === 'kasir' && current_user_id() > 0) {
+    if (current_user_role() === 'kasir' && current_user_id() > 0) {
         $whereKasir = ' AND t.id_user = ?';
         $types .= 'i';
         $params[] = current_user_id();
@@ -59,8 +57,8 @@ $messages = take_flash();
                 <?php endif; ?>
 
                 <?php foreach ($messages as $message): ?>
-                    <div class="alert alert-<?= h($message['type']); ?> alert-dismissible fade show" role="alert">
-                        <?= h($message['message']); ?>
+                    <div class="alert alert-<?= e($message['type']); ?> alert-dismissible fade show" role="alert">
+                        <?= e($message['message']); ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
                     </div>
                 <?php endforeach; ?>
@@ -77,15 +75,15 @@ $messages = take_flash();
                             <div class="row g-3">
                                 <div class="col-12 col-md-4">
                                     <div class="text-muted small">No. Transaksi</div>
-                                    <div class="fw-semibold"><?= h($transaction['kode_transaksi']); ?></div>
+                                    <div class="fw-semibold"><?= e($transaction['kode_transaksi']); ?></div>
                                 </div>
                                 <div class="col-12 col-md-4">
                                     <div class="text-muted small">Tanggal</div>
-                                    <div class="fw-semibold"><?= h(date('d/m/Y H:i', strtotime($transaction['created_at']))); ?></div>
+                                    <div class="fw-semibold"><?= e(date('d/m/Y H:i', strtotime($transaction['created_at']))); ?></div>
                                 </div>
                                 <div class="col-12 col-md-4">
                                     <div class="text-muted small">Kasir</div>
-                                    <div class="fw-semibold"><?= h($transaction['nama_lengkap']); ?></div>
+                                    <div class="fw-semibold"><?= e($transaction['nama_lengkap']); ?></div>
                                 </div>
                                 <div class="col-12 col-md-4">
                                     <div class="text-muted small">Status</div>
@@ -97,11 +95,11 @@ $messages = take_flash();
                                 </div>
                                 <div class="col-12 col-md-4">
                                     <div class="text-muted small">Uang bayar</div>
-                                    <div class="fw-semibold"><?= rupiah($transaction['uang_bayar']); ?></div>
+                                    <div class="fw-semibold"><?= format_rupiah($transaction['uang_bayar']); ?></div>
                                 </div>
                                 <div class="col-12 col-md-4">
                                     <div class="text-muted small">Kembalian</div>
-                                    <div class="fw-semibold"><?= rupiah($transaction['kembalian']); ?></div>
+                                    <div class="fw-semibold"><?= format_rupiah($transaction['kembalian']); ?></div>
                                 </div>
                             </div>
                         </div>
@@ -123,19 +121,19 @@ $messages = take_flash();
                                         <?php foreach ($details as $detail): ?>
                                             <tr>
                                                 <td>
-                                                    <div class="fw-semibold"><?= h($detail['nama_produk']); ?></div>
-                                                    <div class="small text-muted"><?= h($detail['kode_produk'] ?: '-'); ?></div>
+                                                    <div class="fw-semibold"><?= e($detail['nama_produk']); ?></div>
+                                                    <div class="small text-muted"><?= e($detail['kode_produk'] ?: '-'); ?></div>
                                                 </td>
-                                                <td class="text-center"><?= (int) $detail['jumlah']; ?> <?= h($detail['satuan'] ?? ''); ?></td>
-                                                <td class="text-end"><?= rupiah($detail['harga_satuan']); ?></td>
-                                                <td class="text-end"><?= rupiah($detail['subtotal']); ?></td>
+                                                <td class="text-center"><?= (int) $detail['jumlah']; ?> <?= e($detail['satuan'] ?? ''); ?></td>
+                                                <td class="text-end"><?= format_rupiah($detail['harga_satuan']); ?></td>
+                                                <td class="text-end"><?= format_rupiah($detail['subtotal']); ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <th colspan="3" class="text-end">Total</th>
-                                            <th class="text-end"><?= rupiah($transaction['total_harga']); ?></th>
+                                            <th class="text-end"><?= format_rupiah($transaction['total_harga']); ?></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -143,7 +141,7 @@ $messages = take_flash();
                         </div>
                     </div>
 
-                <?php if (is_manager_role() && $transaction['status'] === 'selesai'): ?>
+                <?php if (is_owner_or_admin() && $transaction['status'] === 'selesai'): ?>
                     <div class="d-flex justify-content-center gap-3 mt-4">
                         <a href="edit.php?id=<?= (int) $transaction['id_transaksi']; ?>" class="btn btn-outline-primary rounded-pill px-4">Edit Transaksi</a>    
                         <form method="post" action="batal.php" onsubmit="return confirm('PENTING: Batalkan transaksi ini dan kembalikan stok gudang secara otomatis?');">

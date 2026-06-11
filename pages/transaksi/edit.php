@@ -1,18 +1,18 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
 require_once __DIR__ . '/../../includes/sidebar.php';
-require_once __DIR__ . '/_helpers.php';
 
-if (!is_manager_role()) {
-    flash('danger', 'Akses ditolak. Hanya Owner/Admin yang dapat mengedit transaksi.');
+
+if (!is_owner_or_admin()) {
+    add_flash('danger', 'Akses ditolak. Hanya Owner/Admin yang dapat mengedit transaksi.');
     redirect_to('index.php');
 }
 
-$conn = calontong_db();
+$conn = $conn ?? null;
 $idTransaksi = (int) ($_GET['id'] ?? 0);
 
 if (!$conn) {
-    flash('danger', 'Koneksi database belum tersedia.');
+    add_flash('danger', 'Koneksi database belum tersedia.');
     redirect_to('index.php');
 }
 
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Validasi uang bayar tidak boleh kurang dari total harga
         if ($uangBayar < $totalHarga) {
-            flash('danger', 'Koreksi gagal: Uang bayar (Rp ' . number_format($uangBayar, 0, ',', '.') . ') tidak boleh kurang dari Total Belanja (Rp ' . number_format($totalHarga, 0, ',', '.') . ').');
+            add_flash('danger', 'Koreksi gagal: Uang bayar (Rp ' . number_format($uangBayar, 0, ',', '.') . ') tidak boleh kurang dari Total Belanja (Rp ' . number_format($totalHarga, 0, ',', '.') . ').');
         } else {
             $kembalian = $uangBayar - $totalHarga;
             
@@ -42,14 +42,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
 
             if ($update) {
-                flash('success', 'Data transaksi berhasil dikoreksi.');
+                add_flash('success', 'Data transaksi berhasil dikoreksi.');
                 redirect_to('detail.php?id=' . $idPost);
             } else {
-                flash('danger', 'Gagal memperbarui data transaksi.');
+                add_flash('danger', 'Gagal memperbarui data transaksi.');
             }
         }
     } else {
-        flash('danger', 'Transaksi tidak valid atau sudah dibatalkan.');
+        add_flash('danger', 'Transaksi tidak valid atau sudah dibatalkan.');
     }
 }
 
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $transaction = fetch_one('SELECT * FROM transaksi WHERE id_transaksi = ?', 'i', [$idTransaksi]);
 
 if (!$transaction) {
-    flash('danger', 'Transaksi tidak ditemukan.');
+    add_flash('danger', 'Transaksi tidak ditemukan.');
     redirect_to('index.php');
 }
 
@@ -75,8 +75,8 @@ $messages = take_flash();
 
                 <?php if (!empty($messages)): ?>
                     <?php foreach ($messages as $msg): ?>
-                        <div class="alert alert-<?= h($msg['type']); ?> alert-dismissible fade show" role="alert">
-                            <?= h($msg['message']); ?>
+                        <div class="alert alert-<?= e($msg['type']); ?> alert-dismissible fade show" role="alert">
+                            <?= e($msg['message']); ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php endforeach; ?>
@@ -90,11 +90,11 @@ $messages = take_flash();
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label text-muted small fw-bold">Kode Transaksi</label>
-                                    <input type="text" class="form-control bg-light" value="<?= h($transaction['kode_transaksi']); ?>" readonly disabled>
+                                    <input type="text" class="form-control bg-light" value="<?= e($transaction['kode_transaksi']); ?>" readonly disabled>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label text-muted small fw-bold">Total Belanja</label>
-                                    <input type="text" class="form-control bg-light fw-bold text-danger" value="<?= rupiah($transaction['total_harga']); ?>" readonly disabled>
+                                    <input type="text" class="form-control bg-light fw-bold text-danger" value="<?= format_rupiah($transaction['total_harga']); ?>" readonly disabled>
                                 </div>
                             </div>
 
@@ -111,7 +111,7 @@ $messages = take_flash();
 
                             <div class="mb-4">
                                 <label class="form-label text-muted small fw-bold">Keterangan / Alasan Edit</label>
-                                <textarea name="keterangan" class="form-control" rows="3" placeholder="Contoh: Koreksi nominal pembayaran yang kurang nol..."><?= h($transaction['keterangan']); ?></textarea>
+                                <textarea name="keterangan" class="form-control" rows="3" placeholder="Contoh: Koreksi nominal pembayaran yang kurang nol..."><?= e($transaction['keterangan']); ?></textarea>
                             </div>
 
                             <hr class="text-muted mt-4 mb-4">

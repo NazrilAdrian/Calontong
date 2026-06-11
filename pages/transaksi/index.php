@@ -1,9 +1,7 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_check.php';
 require_once __DIR__ . '/../../includes/sidebar.php';
-require_once __DIR__ . '/_helpers.php';
 
-$conn = calontong_db();
 $tanggalMulai = $_GET['tanggal_mulai'] ?? '';
 $tanggalSelesai = $_GET['tanggal_selesai'] ?? '';
 $where = [];
@@ -22,7 +20,7 @@ if ($tanggalSelesai !== '') {
     $params[] = $tanggalSelesai;
 }
 
-if (current_role() === 'kasir' && current_user_id() > 0) {
+if (current_user_role() === 'kasir' && current_user_id() > 0) {
     $where[] = 't.id_user = ?';
     $types .= 'i';
     $params[] = current_user_id();
@@ -49,7 +47,7 @@ $messages = take_flash();
                     <h1 class="h5 fw-bold mb-0">Riwayat Transaksi</h1>
                     
                     <!-- Tombol ini hanya akan muncul jika yang login adalah Owner/Admin -->
-                    <?php if (is_manager_role()): ?>
+                    <?php if (is_owner_or_admin()): ?>
                         <a href="../laporan/penjualan.php" class="btn btn-outline-dark rounded-pill px-4">
                             Lihat Laporan Penjualan
                         </a>
@@ -63,8 +61,8 @@ $messages = take_flash();
                 <?php endif; ?>
 
                 <?php foreach ($messages as $message): ?>
-                    <div class="alert alert-<?= h($message['type']); ?> alert-dismissible fade show" role="alert">
-                        <?= h($message['message']); ?>
+                    <div class="alert alert-<?= e($message['type']); ?> alert-dismissible fade show" role="alert">
+                        <?= e($message['message']); ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
                     </div>
                 <?php endforeach; ?>
@@ -75,11 +73,11 @@ $messages = take_flash();
                         <form method="get" class="row g-3 align-items-end">
                             <div class="col-12 col-md-5">
                                 <label for="tanggalMulai" class="form-label">Dari tanggal</label>
-                                <input type="date" class="form-control" id="tanggalMulai" name="tanggal_mulai" value="<?= h($tanggalMulai); ?>">
+                                <input type="date" class="form-control" id="tanggalMulai" name="tanggal_mulai" value="<?= e($tanggalMulai); ?>">
                             </div>
                             <div class="col-12 col-md-5">
                                 <label for="tanggalSelesai" class="form-label">Sampai tanggal</label>
-                                <input type="date" class="form-control" id="tanggalSelesai" name="tanggal_selesai" value="<?= h($tanggalSelesai); ?>">
+                                <input type="date" class="form-control" id="tanggalSelesai" name="tanggal_selesai" value="<?= e($tanggalSelesai); ?>">
                             </div>
                             <div class="col-12 col-md-2">
                                 <div class="d-grid">
@@ -115,10 +113,10 @@ $messages = take_flash();
 
                                     <?php foreach ($transactions as $transaction): ?>
                                         <tr>
-                                            <td><?= h($transaction['kode_transaksi']); ?></td>
-                                            <td><?= h(date('d/m/Y H:i', strtotime($transaction['created_at']))); ?></td>
-                                            <td><?= h($transaction['nama_lengkap']); ?></td>
-                                            <td class="text-end"><?= rupiah($transaction['total_harga']); ?></td>
+                                            <td><?= e($transaction['kode_transaksi']); ?></td>
+                                            <td><?= e(date('d/m/Y H:i', strtotime($transaction['created_at']))); ?></td>
+                                            <td><?= e($transaction['nama_lengkap']); ?></td>
+                                            <td class="text-end"><?= format_rupiah($transaction['total_harga']); ?></td>
                                             <td>
                                                 <?php if ($transaction['status'] === 'selesai'): ?>
                                                     <span class="badge text-bg-success">Selesai</span>
@@ -133,7 +131,7 @@ $messages = take_flash();
                                                     title="Detail Transaksi">
                                                         <i class="bi bi-eye"></i>
                                                     </a>
-                                                    <?php if (is_manager_role() && $transaction['status'] === 'selesai'): ?>
+                                                    <?php if (is_owner_or_admin() && $transaction['status'] === 'selesai'): ?>
                                                         <a href="edit.php?id=<?= (int) $transaction['id_transaksi']; ?>"
                                                         class="btn btn-sm btn-outline-warning"
                                                         title="Edit Transaksi">
